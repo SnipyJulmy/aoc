@@ -1,3 +1,5 @@
+package day03
+
 import scala.util.Using
 
 case class Rucksack(left: String, right: String)
@@ -35,6 +37,7 @@ def priority(item: Char): Int = item match {
     }
     .sum
 
+  println(s"======== Day 03 ========")
   println(s"Score part 1 : $score1")
-
   println(s"Score part 2 : $score2")
+  println("=" * 24)

@@ -1,3 +1,5 @@
+package day02
+
 import scala.util.Using
 
 enum Shape(val score: Int):
@@ -72,6 +74,7 @@ def solve(shape : Shape, outcome : Outcome): Score =
     (Shape.fromString(a), Outcome.fromString(b))
   }.foldLeft(0) { case (score, (a, o)) => score + solve(a, o)}
 
+  println(s"======== Day 02 ========")
   println(s"Score part 1 : $score1")
-
   println(s"Score part 2 : $score2")
+  println("=" * 24)

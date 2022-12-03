@@ -1,3 +1,5 @@
+package day01
+
 import scala.util.Using
 
 @main def main(filepath: String): Unit =
@@ -13,6 +15,10 @@ import scala.util.Using
         else (x + elt.toInt) :: xs
     }
 
-  println(s"Part One : ${caloriesByElf.max}")
-  println(s"Part Two : ${caloriesByElf.sorted(Ordering.Int.reverse).take(3).sum}")
+  val score1 = caloriesByElf.max
+  val score2 = caloriesByElf.sorted(Ordering.Int.reverse).take(3).sum
 
+  println(s"======== Day 01 ========")
+  println(s"Score part 1 : $score1")
+  println(s"Score part 2 : $score2")
+  println("=" * 24)
