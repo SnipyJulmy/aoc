@@ -1,6 +1,7 @@
 package day03
 
 import scala.util.Using
+import scala.util.control.NonLocalReturns
 
 case class Rucksack(left: String, right: String)
 
@@ -31,7 +32,8 @@ def priority(item: Char): Int = item match {
 
   val score2: Int = input
     .grouped(3)
-    .map { case List(a, b, c) =>
+    .map { 
+      case List(a, b, c) =>
       val badge = a.toList.intersect(b.toList.intersect(c.toList)).head
       priority(badge)
     }
