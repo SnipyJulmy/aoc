@@ -44,8 +44,8 @@ class Day09Spec extends munit.FunSuite:
   test("simulate") {
     import Movement._
 
-    for (i <- 0 until 1000) {
-      val movements = List.fill(scala.util.Random.nextInt(10000))(scala.util.Random.shuffle(List(Down, Up, Left, Right)).head)
+    for (i <- 0 until 10) {
+      val movements = List.fill(scala.util.Random.nextInt(10))(scala.util.Random.shuffle(List(Down, Up, Left, Right)).head)
       val a = simulate(movements)
       val b = simulate(movements, 2)
       assertEquals(a._2, b._2)
