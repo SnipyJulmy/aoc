@@ -1,25 +1,24 @@
-# Advent of Code 2022
+# Advent of Code
 
-My AOC solution with the following languages :
+My solutions for Advent of Code problems.
 
-* scala3
-* rust
+## Running the code
 
-## scala3
+### Scala
 
 You can run the code for any day with the following:
-```scala
-sbt $day$
-// example
-sbt day01
+```bash
+> sbt $day
+# Example
+> sbt day01
 ```
 
-## rust
+## Rust
 
 You can run any binary defined in the Cargo.toml file with the following:
 
 ```bash
-$> cargo run --bin $day$ -- ../$day$.txt
+> cargo run --bin $day -- ../$day.txt
 # Example
-$> cargo run --bin day01 -- ../day01.txt
+> cargo run --bin day01 -- ../day01.txt
 ```
