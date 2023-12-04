@@ -4,8 +4,8 @@ import scala.util.Using
 
 @main
 def main(filepath: String): Unit =
-  val input = Using(scala.io.Source.fromFile(filepath))(source => source.getLines().toList).getOrElse { println("Unable to read $filepath"); sys.exit(1) }
 
+  val input  = aoc.readInput(filepath)
   val score1 = input.map(calibration).sum
   val score2 = input.map(calibrationWithLetters).sum
 
@@ -26,7 +26,7 @@ def calibration(line: String): Int =
 def calibrationWithLetters(line: String): Int =
   val regex   = raw"(?=(1|2|3|4|5|6|7|8|9|one|two|three|four|five|six|seven|eight|nine))".r
   val matches = regex.findAllIn(line).matchData.map(_.group(1)).toList
-  val value = s"${toInt(matches.head)}${toInt(matches.last)}".toInt
+  val value   = s"${toInt(matches.head)}${toInt(matches.last)}".toInt
   println(s"$line : $matches =>  $value")
   value
 
