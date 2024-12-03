@@ -12,6 +12,14 @@ def readInput(filepath: String) =
     sys.exit(1)
   }
 
+def readInputAsStream(filepath: String) =
+  Using(scala.io.Source.fromFile(filepath)) { source =>
+    source.toList.toStream
+  }.getOrElse {
+    println("Unable to read $filepath")
+    sys.exit(1)
+  }
+
 class ParseException(input: String, parser: String = "noname") extends Exception
 
 trait Problem
@@ -22,7 +30,7 @@ abstract class ProblemParser[A <: Problem] extends RegexParsers:
     val input = lines.mkString("\n")
     parse(problem, input) match
       case Success(result, next) if next.atEnd => result
-      case _ => throw new ParseException(input, "problem")
+      case _                                   => throw new ParseException(input, "problem")
 
   def problem: Parser[A]
 
