@@ -3,14 +3,14 @@ val scala3Version = "3.5.2"
 lazy val root = project
   .in(file("."))
   .settings(
-    name := "aoc",
-    version := "2024",
+    name         := "aoc",
+    version      := "2024",
     scalaVersion := scala3Version
   )
 
 libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-parser-combinators" % "2.4.0",
-  "org.scalameta" %% "munit" % "1.0.2" % Test
+  "org.scalameta"          %% "munit"                    % "1.0.2" % Test
 )
 
 commands ++= (1 to 25).toSeq.map { day =>
