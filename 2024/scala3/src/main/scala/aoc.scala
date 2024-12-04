@@ -20,6 +20,14 @@ def readInputAsStream(filepath: String) =
     sys.exit(1)
   }
 
+def readInputAsMatrix[T <: Any](filepath: String, transform: Char => T = identity): Vector[Vector[T]] =
+  Using(scala.io.Source.fromFile(filepath)) { source =>
+    source.getLines().map(_.map(transform).toVector).toVector
+  }.getOrElse {
+    println("Unable to read $filepath")
+    sys.exit(1)
+  }
+
 class ParseException(input: String, parser: String = "noname") extends Exception
 
 trait Problem
