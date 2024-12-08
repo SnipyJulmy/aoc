@@ -1,81 +1,81 @@
 package day06
 
-import scala.util.control.Breaks.{break, breakable}
 import Direction._
+import scala.annotation.tailrec
+import scala.collection.mutable
 
 @main
 def main(filepath: String): Unit =
 
-  val input            = aoc.readInputAsMatrix(filepath).toArray.map(_.toArray)
-  val (score1, score2) = simulate(input)
+  val input       = aoc.readInputAsMatrix(filepath)
+  val (score1, _) = simulate(input)
+  val score2      = countLoopingObstacle(input)
 
   println(s"${"=" * 8} Day 06 ${"=" * 8}")
   println(s"Score part 1 : $score1")
   println(s"Score part 2 : $score2")
   println("=" * 24)
 
-def simulate(start: Array[Array[Char]]): (Int, Int) =
-  val maxX    = start.length
-  val maxY    = start.head.length
-  val visited = start.map(_.map(_ => false))
-
-  var Seq((x, y)) = for {
-    x <- start.indices
-    y <- start.head.indices
-    if start(x)(y) == '^'
-  } yield (x, y)
-  var direction = N
-  visited(x)(y) = true
-
-  var count            = 1
-  var possibleObstacle = 0
-
-  breakable {
-    while true do
-      val (x1, y1) = direction((x, y))
-      if x1 >= 0 && x1 < maxY && y1 >= 0 && y1 < maxX then
-
-        if start(x1)(y1) != '#' then
-          start(x1)(y1) = '#'
-          if (isLooping(start, x, y, direction)) then possibleObstacle += 1
-          start(x1)(y1) = '.'
-
-        if start(x1)(y1) == '#' then direction = direction.rotateRight
-        else
-          start(x)(y) = '.'
-          x = x1
-          y = y1
-          if !visited(x)(y) then
-            visited(x)(y) = true
-            count += 1
-      else break
-  }
-
-  (count, possibleObstacle)
-
-// check if the given map simulation has a loop or not
-def isLooping(map: Array[Array[Char]], x: Int, y: Int, direction: Direction): Boolean =
+def simulate(map: Vector[Vector[Char]]): (Int, Int) =
   val maxX    = map.length
   val maxY    = map.head.length
-  val visited = map.map(_.map(_ => false))
-  var xStep   = x
-  var yStep   = y
-  var dir     = direction
+  val visited = Array.fill(maxX, maxY)(false)
+  val loops   = Array.fill(maxX, maxY)(false)
 
-  breakable {
-    while true do
-      val (xNext, yNext) = direction((xStep, yStep))
-      if xNext >= 0 && xNext < maxX && yNext >= 0 && yNext < maxY then
-        if map(xNext)(yNext) == '#' then dir = dir.rotateRight
-        else
-          xStep = xNext
-          yStep = yNext
-          visited(xStep)(yStep) = true
-        if xStep == x && yStep == y && dir == direction then break
-      else break
+  val Seq((xStart, yStart)) = for {
+    x <- map.indices
+    y <- map.head.indices
+    if map(x)(y) == '^'
+  } yield (x, y)
+
+  def inner(x: Int, y: Int, dir: Direction): Unit =
+    visited(x)(y) = true
+    val (xNext, yNext) = dir((x, y))
+    if xNext >= 0 && xNext < maxX && yNext >= 0 && yNext < maxY then
+      if map(xNext)(yNext) == '#' then inner(x, y, dir.rotateRight)
+      else
+        if isLooping(map.updated(xNext, map(xNext).updated(yNext, '#')), x, y, dir) then loops(xNext)(yNext) = true
+        inner(xNext, yNext, dir)
+
+  inner(xStart, yStart, N)
+  loops(xStart)(yStart) = false
+
+  (visited.map(_.count(identity)).sum, loops.map(_.count(identity)).sum)
+
+def countLoopingObstacle(map: Vector[Vector[Char]]): Int =
+  val Seq((xStart, yStart)) = for {
+    x <- map.indices
+    y <- map.head.indices
+    if map(x)(y) == '^'
+  } yield (x, y)
+  var count = 0
+  for (i <- map.indices) {
+    for (j <- map(i).indices) {
+      map(i)(j) match
+        case '.' =>
+          if isLooping(map.updated(i, map(i).updated(j, '#')), xStart, yStart, N) then count += 1
+        case _ => ()
+    }
   }
+  count
 
-  return xStep == x && yStep == y && dir == direction
+// check if the given map has a loop or not
+def isLooping(map: Vector[Vector[Char]], startX: Int, startY: Int, startDirection: Direction): Boolean =
+  val maxX    = map.length
+  val maxY    = map.head.length
+  val visited = new mutable.HashSet[(Int, Int, Direction)]()
+
+  @tailrec
+  def inner(x: Int, y: Int, dir: Direction): Boolean =
+    if visited.contains((x, y, dir)) then true
+    else
+      visited.add((x, y, dir))
+      val (xNext, yNext) = dir((x, y))
+      if xNext < 0 || xNext >= maxX || yNext < 0 || yNext >= maxY then false
+      else if map(xNext)(yNext) == '#' then inner(x, y, dir.rotateRight)
+      else inner(xNext, yNext, dir)
+
+  inner(startX, startY, startDirection)
 
 enum Direction(val f: ((Int, Int)) => (Int, Int)):
   case N extends Direction((x, y) => (x - 1, y))
@@ -91,8 +91,8 @@ enum Direction(val f: ((Int, Int)) => (Int, Int)):
     case E => S
     case W => N
 
-  lazy val char: Char = this match
-    case N => '^'
-    case S => 'v'
-    case E => '>'
-    case W => '<'
+  override def toString(): String = this match
+    case N => "^"
+    case S => "v"
+    case E => ">"
+    case W => "<"
