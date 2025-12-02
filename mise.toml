@@ -1,0 +1,6 @@
+[tools]
+ghc = "latest"
+java = "openjdk-21"
+python = "latest"
+sbt = "latest"
+scala = "latest"
