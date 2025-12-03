@@ -1,0 +1,12 @@
+[tools]
+
+[tasks.run]
+depends = ["run-prolog"]
+
+[tasks.run-prolog]
+quiet = true
+run = """swipl -f ./day03.pl -g 'main("../inputs/day03.txt"), halt.'"""
+
+[tasks.run-prolog-sample]
+quiet = true
+run = """swipl -f ./day03.pl -g 'main("../inputs/day03-example.txt"), halt.'"""
