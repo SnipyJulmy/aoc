@@ -2,3 +2,15 @@
 cljstyle = "latest"
 clojure = "latest"
 rlwrap = "latest"
+
+[tasks.run]
+depends = ["run-clojure"]
+
+[tasks.format]
+depends = ["format-clojure"]
+
+[tasks.run-clojure]
+run = """clj -Sdeps '{:paths ["."]}' -M -m day02 ../inputs/day02.txt"""
+
+[tasks.format-clojure]
+run = """cljstyle fix day02.clj"""

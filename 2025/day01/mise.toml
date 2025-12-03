@@ -1,0 +1,8 @@
+[tools]
+ghc = "latest"
+
+[tasks.run]
+depends = ["run-haskell"]
+
+[tasks.run-haskell]
+run = """runhaskell day01.hs ../inputs/day01.txt"""
