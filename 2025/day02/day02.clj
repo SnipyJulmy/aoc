@@ -2,6 +2,7 @@
 
 (require '[clojure.string :as str] '[clojure.core.reducers :as r])
 
+
 ;; take "11-22" and return (11, 12, ..., 22)
 (defn to-range
   [id-range]
@@ -14,11 +15,16 @@
   (reduce + (mapv (fn [r]
                     (reduce + (filterv pred? (to-range r)))) ranges)))
 
-(defn repeated-twice? [x]
+
+(defn repeated-twice?
+  [x]
   (some? (re-matches #"^(\d+)\1$" (str x))))
 
-(defn repeated-number? [x]
+
+(defn repeated-number?
+  [x]
   (some? (re-matches #"^(\d+)\1+$" (str x))))
+
 
 (defn -main
   [& args]
