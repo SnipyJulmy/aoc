@@ -1,5 +1,3 @@
-let filename = Sys.argv.(1)
-
 let read_content (filename : string) : string Dynarray.t =
   let lines = Dynarray.create () in
   let input_channel = open_in filename in
@@ -54,6 +52,7 @@ let clean_papers (source_matrix : char Dynarray.t Dynarray.t)
     source_matrix;
   !count
 
+let filename = Sys.argv.(1)
 let input = read_content filename
 
 let matrix =
