@@ -1,0 +1,10 @@
+[tasks.run]
+depends = ["run-ocaml"]
+
+[tasks.run-ocaml]
+quiet = true
+run = """nix-shell --run "ocaml day04.ml ../inputs/day04.txt""""
+
+[tasks.run-ocaml-sample]
+quiet = true
+run = """nix-shell --run "ocaml day04.ml ../inputs/day04-example.txt""""
