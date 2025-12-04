@@ -13,7 +13,6 @@ main(Filename) :-
   foldl(joltage(12), Batteries, 0, Score2),
   format('Part 1: ~w~n', [Score1]),
   format('Part 2: ~w~n', [Score2]).
-  
 
 read_file(Stream, []) :-
   at_end_of_stream(Stream), !.
@@ -57,7 +56,6 @@ joltage(N, Battery, Start, End, [MaxVal|Res]) :-
   Next is MaxIdx + 1,
   End1 is End + 1,
   joltage(N1, Battery, Next, End1, Res).
-  
 
 %! max(List, Start, End, N, Idx) is det
 %
