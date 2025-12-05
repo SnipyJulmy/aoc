@@ -1,7 +1,10 @@
 %!PS
 % Advent of Code 2025 - Day 05
 
-% Dynamic Array implementation
+% max function keep the greatest number on the stack
+/max { 2 copy lt { exch } if pop } def
+
+%%% Dynamic Array implementation
 
 % usage: /myArray Dynarray.init def
 /Dynarray.init {
@@ -53,32 +56,20 @@
   end
 } def
 
-% usage : myArray Dynarray.print
-/Dynarray.print {
-  begin
-    ([) print
-    0 1 Size 1 sub {
-      Data exch get Range.print
-    } for
-    (]) print
-    (DEBUG) ==
-  end
-} def
-
 % usage : myArray {lambda} base Dynarray.foldleft
 % lambda : acc elt on the stack
 % return : acc
 /Dynarray.foldleft {
-  /acc exch def
-  /lambda exch def
+  /Dynarray.foldleft.acc exch def
+  /Dynarray.foldleft.lambda exch def
   begin
     0 1 Size 1 sub {
       Data exch get
-      acc exch
-      lambda
-      /acc exch def
+      Dynarray.foldleft.acc exch
+      Dynarray.foldleft.lambda
+      /Dynarray.foldleft.acc exch def
     } for
-  acc
+  Dynarray.foldleft.acc
   end
 } def
 
@@ -91,12 +82,9 @@
     /i exch def
     i 1 array Dynarray.size 1 sub {
       /j exch def
-      array i Dynarray.get array j Dynarray.get compare
-      0 lt { /min j def } if
-      (min is ) print array min Dynarray.get Range.start ==
+      array min Dynarray.get array j Dynarray.get compare
+      0 gt { /min j def } if
     } for
-    () ==
-    () ==
     i min ne { array i min Dynarray.swap} if
   } for
 } def
@@ -128,6 +116,12 @@
   end
 } def
 
+/Range.end {
+  begin
+    End
+  end
+} def
+
 % usage myRange n Range.isIn
 /Range.isIn {
   exch
@@ -139,22 +133,15 @@
   end
 } def
 
-% usage myRange Range.print
-/Range.print {
-  /buf 20 string def
-  begin
-    ([) print
-    Start buf cvs print
-    (-) print
-    End buf cvs print
-    (]) print
-  end
+% usage : r1 r2 Range.compare ->
+% negative number if r1 < r2
+% positive number if r1 > r2
+% zero            if r1 = r2
+/Range.compare {
+  exch Range.start exch Range.start sub
 } def
 
 % --- Range - end
-
-% Font config
-/Courier findfont 12 scalefont setfont
 
 % open file and store content
 /InputFile where { pop } { /InputFile (../inputs/day05-example.txt) def } ifelse
@@ -187,7 +174,6 @@
   ids exch Dynarray.append
 } loop
 
-
 /score1 ids { % acc elt ->
   /elt exch def
   /sum exch def
@@ -199,22 +185,31 @@
   sum
 } 0 Dynarray.foldleft def
 
-ranges Dynarray.print
-ranges {
-  Range.start exch Range.start sub
-} Dynarray.sort
+ranges { Range.compare } Dynarray.sort
 
-ranges Dynarray.print
+/buffer 20 string def
+/current ranges 0 Dynarray.get Range.start def
 
-/score2 1 def
+/score2 ranges { % acc elt ->
+  /elt exch def
+  /acc exch def
 
-score1 ==
-score2 ==
+  /Start elt Range.start def
+  /End elt Range.end def
+  /EffStart Start current 1 add max def
+  End EffStart ge {
+    /len End EffStart sub 1 add def
+    /acc acc len add def
+    /current End def
+  } if
+  acc
+} 1 Dynarray.foldleft def
+
+% Font config
+/Courier findfont 12 scalefont setfont
 
 50 750 moveto
 (Advent of Code 2025 - Day 05) show
-
-/buffer 20 string def
 
 50 720 moveto
 (Part 1: ) show
