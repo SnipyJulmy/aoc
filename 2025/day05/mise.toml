@@ -1,0 +1,10 @@
+[tasks.run]
+depends = ["run-postscript"]
+
+[tasks.run-postscript]
+quiet = true
+run = """gs -dNOSAFER -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=solution.pdf --permit-file-read=. -dInputFile="(../inputs/day05.txt)" day05.ps"""
+
+[tasks.run-postscript-sample]
+quiet = true
+run = """gs -dNOSAFER -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=solution.pdf --permit-file-read=. -dInputFile="(../inputs/day05-example.txt)" day05.ps"""

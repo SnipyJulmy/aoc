@@ -1,0 +1,114 @@
+%!PS
+% Advent of Code 2025 - Day 05
+
+% Dynamic Array implementation
+
+% usage: /myArray Dynarray.init def
+/Dynarray.init {
+  4 dict begin
+    /Capacity 128 def
+    /Size 0 def
+    /Data Capacity array def
+    currentdict
+  end
+} def
+
+% usage : /size myArray Dynarray.size def
+/Dynarray.size {
+  begin
+    Size
+  end
+} def
+
+% usage : myArray element Dynarray.append
+/Dynarray.append {
+  exch 
+  begin
+    /elt exch def
+    Size Capacity ge {
+      /Capacity Capacity 2 mul def
+      /New Capacity array def
+      New 0 Data putinterval
+      /Data NewData def
+    } if
+    Data Size elt put
+    /Size Size 1 add def
+  end
+} def
+
+% usage : myArray Dynarray.print
+/Dynarray.print {
+  begin
+    (Dynarray : ) ==
+
+    Data 0 get type /dicttype eq { (dict !) == } if
+
+
+    Data 0 Size getinterval ==
+    (---------- ) ==
+  end
+} def
+
+% --- Range - data structure
+% usage /myRange start end Range.init def
+/Range.init {
+  2 dict begin
+    /Start exch def
+    /End exch def
+  end
+} def
+% --- Range - end
+
+% Font config
+/Courier findfont 12 scalefont setfont
+
+% open file and store content
+/InputFile where { pop } { /InputFile (../inputs/day05-example.txt) def } ifelse
+/Stream InputFile (r) file def
+/ReadBuffer 1024 string def
+
+/ranges Dynarray.init def
+/ids Dynarray.init def
+
+{
+  Stream ReadBuffer readline
+  not { pop exit} if
+  dup length 0 le { pop exit } if
+
+  (-) search % this split the string in two
+  {
+    cvi 3 1 roll pop cvi
+    ranges 3 1 roll
+    Range.init
+  } if
+
+  ranges exch Dynarray.append
+} loop
+
+{
+  Stream ReadBuffer readline
+  not { pop exit} if
+  cvi
+  ids exch Dynarray.append
+} loop
+
+ranges Dynarray.print
+ids Dynarray.print
+
+
+/buffer 20 string def
+/score1 0 def
+/score2 0 def
+
+50 750 moveto
+(Advent of Code 2025 - Day 05) show
+
+50 720 moveto
+(Part 1: ) show
+score1 buffer cvs show
+
+50 700 moveto
+(Part 2: ) show
+score2 buffer cvs show
+
+showpage
