@@ -29,23 +29,86 @@
       /Capacity Capacity 2 mul def
       /New Capacity array def
       New 0 Data putinterval
-      /Data NewData def
+      /Data New def
     } if
     Data Size elt put
     /Size Size 1 add def
   end
 } def
 
+% usage : myArray idx Dynarray.get
+/Dynarray.get {
+  exch
+  begin
+    Data exch get
+  end
+} def
+
+% usage : myArray idx value Dynarray.set
+/Dynarray.set {
+  /value exch def
+  /idx exch def
+  begin
+    Data idx value put
+  end
+} def
+
 % usage : myArray Dynarray.print
 /Dynarray.print {
   begin
-    (Dynarray : ) ==
+    ([) print
+    0 1 Size 1 sub {
+      Data exch get Range.print
+    } for
+    (]) print
+    (DEBUG) ==
+  end
+} def
 
-    Data 0 get type /dicttype eq { (dict !) == } if
+% usage : myArray {lambda} base Dynarray.foldleft
+% lambda : acc elt on the stack
+% return : acc
+/Dynarray.foldleft {
+  /acc exch def
+  /lambda exch def
+  begin
+    0 1 Size 1 sub {
+      Data exch get
+      acc exch
+      lambda
+      /acc exch def
+    } for
+  acc
+  end
+} def
 
+% usage myArray { compare : x y -> {-1,0,1} } Dynarray.sort
+/Dynarray.sort {
+  /compare exch def
+  /array exch def
+  0 1 array Dynarray.size 2 sub {
+    dup /min exch def
+    /i exch def
+    i 1 array Dynarray.size 1 sub {
+      /j exch def
+      array i Dynarray.get array j Dynarray.get compare
+      0 lt { /min j def } if
+      (min is ) print array min Dynarray.get Range.start ==
+    } for
+    () ==
+    () ==
+    i min ne { array i min Dynarray.swap} if
+  } for
+} def
 
-    Data 0 Size getinterval ==
-    (---------- ) ==
+% usage : array x y Dynarray.swap
+/Dynarray.swap {
+  /y exch def
+  /x exch def
+  begin
+    /tmp Data x get def
+    Data x Data y get put
+    Data y tmp put
   end
 } def
 
@@ -53,10 +116,41 @@
 % usage /myRange start end Range.init def
 /Range.init {
   2 dict begin
-    /Start exch def
     /End exch def
+    /Start exch def
+    currentdict
   end
 } def
+
+/Range.start {
+  begin
+    Start
+  end
+} def
+
+% usage myRange n Range.isIn
+/Range.isIn {
+  exch
+  begin
+    dup Start ge
+    exch
+    End le
+    and
+  end
+} def
+
+% usage myRange Range.print
+/Range.print {
+  /buf 20 string def
+  begin
+    ([) print
+    Start buf cvs print
+    (-) print
+    End buf cvs print
+    (]) print
+  end
+} def
+
 % --- Range - end
 
 % Font config
@@ -81,9 +175,10 @@
     ranges 3 1 roll
     Range.init
   } if
-
   ranges exch Dynarray.append
+  pop
 } loop
+
 
 {
   Stream ReadBuffer readline
@@ -92,16 +187,34 @@
   ids exch Dynarray.append
 } loop
 
+
+/score1 ids { % acc elt ->
+  /elt exch def
+  /sum exch def
+  0 1 ranges Dynarray.size 1 sub {
+    ranges exch Dynarray.get
+    elt Range.isIn
+    { /sum sum 1 add def exit } if
+  } for
+  sum
+} 0 Dynarray.foldleft def
+
 ranges Dynarray.print
-ids Dynarray.print
+ranges {
+  Range.start exch Range.start sub
+} Dynarray.sort
 
+ranges Dynarray.print
 
-/buffer 20 string def
-/score1 0 def
-/score2 0 def
+/score2 1 def
+
+score1 ==
+score2 ==
 
 50 750 moveto
 (Advent of Code 2025 - Day 05) show
+
+/buffer 20 string def
 
 50 720 moveto
 (Part 1: ) show
