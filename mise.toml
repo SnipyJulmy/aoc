@@ -1,8 +1,1 @@
 experimental_monorepo_root = true
-
-[tools]
-ghc = "latest"
-java = "openjdk-21"
-python = "latest"
-sbt = "latest"
-scala = "latest"
