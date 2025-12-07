@@ -1,0 +1,9 @@
+(use-modules (ice-9 readline)
+             (ice-9 history))
+
+(activate-readline)
+
+(let ((hist-file (string-append (getcwd) "/.guile_history")))
+  (if (not (access? hist-file F_OK))
+    (call-with-output-file hist-file (lambda (p) (display "" p))))
+  (read-history hist-file))

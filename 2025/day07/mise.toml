@@ -1,0 +1,7 @@
+[tasks.run]
+quiet = true
+run = "guile -L . -e '(@ (day07) main)' -s day07.scm ../inputs/day07.txt"
+
+[tasks.run-sample]
+quiet = true
+run = "guile -L . -e '(@ (day07) main)' -s day07.scm ../inputs/day07-example.txt"
