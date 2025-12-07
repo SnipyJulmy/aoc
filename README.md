@@ -22,3 +22,17 @@ You can run any binary defined in the Cargo.toml file with the following:
 # Example
 > cargo run --bin day01 -- ../inputs/day01.txt
 ```
+
+# 2025 - Languages
+- Day 1 : Haskell
+- Day 2 : Clojure
+- Day 3 : Prolog
+- Day 4 : OCaml
+- Day 5 : Postscript
+- Day 6 : Smalltalk (Pharo)
+- Day 7 : Scheme (Guile)
+- Day 8 : TBD
+- Day 9 : TBD
+- Day 10 : TBD
+- Day 11 : TBD
+- Day 12 : TBD
