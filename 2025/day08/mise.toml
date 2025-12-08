@@ -1,0 +1,11 @@
+[tasks.solve]
+quiet = true
+run = """
+nim c -r day08.nim ../inputs/day08.txt
+"""
+
+[tasks.solve-sample]
+quiet = true
+run = """
+nim c -r day08.nim ../inputs/day08-example.txt
+"""

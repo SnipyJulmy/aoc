@@ -31,8 +31,8 @@ You can run any binary defined in the Cargo.toml file with the following:
 - Day 5 : Postscript
 - Day 6 : Smalltalk (Pharo)
 - Day 7 : Scheme (Guile)
-- Day 8 : TBD
-- Day 9 : TBD
-- Day 10 : TBD
-- Day 11 : TBD
-- Day 12 : TBD
+- Day 8 : Nim
+- Day 9 : Zig
+- Day 10 : 
+- Day 11 : 
+- Day 12 : 
