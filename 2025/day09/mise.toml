@@ -1,0 +1,7 @@
+[tasks.solve-sample]
+quiet = true
+run = "lua day09.lua ../inputs/day09-example.txt"
+
+[tasks.solve]
+quiet = true
+run = "lua day09.lua ../inputs/day09.txt"

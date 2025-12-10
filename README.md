@@ -32,7 +32,7 @@ You can run any binary defined in the Cargo.toml file with the following:
 - Day 6 : Smalltalk (Pharo)
 - Day 7 : Scheme (Guile)
 - Day 8 : Nim
-- Day 9 : Zig
+- Day 9 : Lua
 - Day 10 : 
 - Day 11 : 
 - Day 12 : 
