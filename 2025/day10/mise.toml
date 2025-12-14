@@ -1,0 +1,7 @@
+[tasks.solve]
+quiet = true
+run = "python day10.py ../inputs/day10.txt"
+
+[tasks.solve-sample]
+quiet = true
+run = "python day10.py ../inputs/day10-example.txt"
